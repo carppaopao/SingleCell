@@ -1,0 +1,125 @@
+{% extends "index.html" %}
+
+{% block content1 %}
+<div class="container">
+    <!-- 导航 -->
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <strong><a class="navbar-brand" href="/index/">
+                        <font _mstmutation="1" _msttexthash="25569596" _msthash="1">Single<span style="color: #68D391"
+                                _mstmutation="1" _istranslated="1">Cell</span>db</font>
+                    </a></strong>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/home/">Home <span class="sr-only">(current)</span></a></li>
+                    <li><a href="/search/">
+                            <font _mstmutation="1" _msttexthash="25569596" _msthash="1">Search</font>
+                        </a></li>
+                    <li><a href="/browse/">Browse</a></li>
+                    <li><a href="#">Statistics</a></li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                            aria-expanded="false">Human <span class="caret"></span></a>
+                    </li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Link</a></li>
+                    <li><a href="{% url 'download' %}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                        aria-expanded="false">Download</a></li>
+
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+
+    <h3>List for singlecell</h3>
+
+
+    <!-- Select -->
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            <div class="dataTables_length" id="chdtable_length">
+
+            </div>
+        </div>
+        <!-- 搜索功能 -->
+        <form method="get">
+            <div class="input-group " >
+                <span class="input-group-addon" id="basic-addon1"><i data-v-06292f57="" class="fa fa-search"
+                        style="color:red;"></i></span>
+
+                <input type="search" name="q" class="form-control" placeholder="Search for..."
+                    aria-describedby="basic-addon1" style="width: 300px; margin-right: 10px;" value="{{ search }}">
+                <select name="field" class="btn btn-default">
+                    <option value="zone" {% if field == "zone" %} selected {% endif %}>zone</option>
+                    <option value="run_id" {% if field == "run_id" %} selected {% endif %}>run_id</option>
+                    <option value="cell_type" {% if field == "cell_type" %} selected {% endif %}>cell_type</option>
+                    <option value="time_point" {% if field == "time_point" %} selected {% endif %}>time_point</option>
+                </select>
+
+                <button class="btn btn-default" type="search" style="margin-left: 5px;">Submit</button>
+            </div><!-- /input-group -->
+        </form>
+        <hr>
+
+    </div>
+
+    <!-- 单细胞数据表格 -->
+    <table class="table table-bordered table-hover">
+
+        <thead>
+            <tr>
+                <th>Cell_barcode</th>
+                <th>cell_type</th>
+                <th>zone</th>
+                <th>run_id</th>
+                <th>time_point</th>
+                <th>UMAP_X</th>
+                <th>UMAP_Y</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for a1 in res %}
+            <tr>
+                <td>{{ a1.Cell_barcode }}</td>
+                <td>{{ a1.cell_type }}</td>
+                <td>{{ a1.zone }}</td>
+                <td>{{ a1.run_id }}</td>
+                <td>{{ a1.time_point }}</td>
+                <td>{{ a1.UMAP_X }}</td>
+                <td>{{ a1.UMAP_Y }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- 分页 -->
+    <div style="display: flex;justify-content: center;" class="col-sm-12">
+        <nav aria-label="...">
+            <ul class="pagination">
+                <li><a href="{{ head_page }}" aria-label="Previous"><span aria-hidden="true">首页</span></a></li>
+                {{ page_string }}
+                <li><a href="{{ end_page }}" aria-label="Next"><span aria-hidden="true">尾页</span></a></li>
+            </ul>
+            </ul>
+        </nav>
+    </div>
+
+
+
+</div>
+{% endblock %}
