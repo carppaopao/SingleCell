@@ -1,0 +1,67 @@
+{% extends 'celldb/base.html' %} {% load static %} {% block content %}
+<link href="{% static 'celldb/css/cdn.datatables.net_1.13.4_css_dataTables.bootstrap5.min.css' %}" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+
+
+
+
+
+
+<a class="nav-link a1" href="{% url 'celldb-browseG' %}" >24528865</a>
+<button class="a1">24528865</button>
+  
+
+{% endblock %}
+
+
+
+{% block scripts %}
+
+<script>
+  $(document).ready(function() {
+    $(".a1").click(function(event) {
+      // event.preventDefault();
+
+      var link = $(this).text();
+      console.log(link)
+      $.ajax({
+        url: "/test/liter",
+        type: "GET",
+        data: { link: link },
+        headers: { "X-Request-Name": "your-request-name" },
+        success: function(response) {
+          console.log('success');
+          // window.location.href = document.querySelector(".nav-link.a1").href;
+        }
+      });
+    });
+  });
+</script>
+<!-- 
+
+  <script>
+  function sendData(event) {
+    event.preventDefault();  // 阻止默认超链接跳转行为
+    
+    var link = event.target.href;  // 获取超链接地址
+    console.log(link)
+    // 发送AJAX请求，将超链接内容的数据发送给后端
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/api/test/liter", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        // console.log(xhr.responseText);  // 输出后端返回的数据
+        window.location.href = link;
+
+      }
+    };
+    xhr.send(JSON.stringify({ link: link }));
+  }
+  </script> -->
+  
+
+
+
+
+{% endblock %}

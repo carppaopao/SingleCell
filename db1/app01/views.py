@@ -1,9 +1,131 @@
+from django.core.paginator import Paginator
+from django.shortcuts import render,redirect
+from .models import tliver1, LiterData
+
+def home(request):
+    logs = [
+        {"date": "5.24~5.31", "content": "使用Django框架建立网站的雏形"},
+        {"date": "6.1", "content": "实现了在后端对Single_cell_Meta_data.txt中的数据进行绘制，并传回前端页面"},
+        {"date": "6.3", "content": "学习使用JavaScript，以便处理数据格式"},
+        {"date": "6.4~6.6", "content": "使用echarts.js绘图"},
+        {"date": "6.7~6.10", "content": "分页功能实现"},
+        {"date": "6.11~15", "content": "尝试前后端分离"},
+        {"date": "6.16~6.20", "content": "完善搜索功能和分页按钮"},
+        {"date": "6.21~6.27", "content": "使用Databales插件;增加了下载数据功能;Plot增加了筛选功能;上传了summary文件中的数据"},
+        {"date": "6.28~7.5", "content": "对数据过滤，允许对数据进行添加或删除"},
+    ]
+    return render(request, "celldb/home.html", {"logs": logs})
+
+def plotScatter(request):
+    return render(request, "celldb/plotScatter.html")
+
+def overview(request):
+    liter = LiterData.objects.all()
+    data = ""
+
+    return render(request, "celldb/overview.html", {"data": data, "liter":liter})
+
+def browseU(request):
+    # data = tliver1.objects.all()
+    # items_per_page = 10
+    # paginator = Paginator(data, items_per_page)
+    # page_number = request.GET.get("page")
+    # page_obj = paginator.get_page(page_number)
+    liter = LiterData.objects.all()
+    
+
+    return render(request, "celldb/browseU.html", {"liter":liter})
+
+
+
+def browseG(request):
+    liter = LiterData.objects.all()
+    data = ""
+    return render(request, "celldb/browseG.html", {"data": data, "liter":liter})
+
+
+def upload(request):
+    return render(request, "celldb/upload.html")
+
+
+
+def download(request):
+    return render(request, "celldb/download.html")
+
+
+
+def base(req):
+    return render(req,'celldb/base.html')
+
+
+
+
+def analyse(req):
+    return render(req,'celldb/analyse.html')
+
+
+
+
+
+def testli(req):
+
+    link=req.GET.get('link')
+    url = f"/test?link={link}"
+    print(url)
+    # data = LiterData.objects.values()
+    # serializer = LiterIdSer(data, many=True)
+
+    # return Response(serializer.data)
+    return redirect(url)
+
+
+
+def test(req):
+    link= req.GET.get('link')
+    print(link)
+    if link:
+        return render(req,'celldb/browseG.html',{'link':link})
+    else:
+        return render(req,'celldb/test.html')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # from django.shortcuts import render
 # from django.http import HttpResponse
-# from app01 import models
 # from django.utils.safestring import mark_safe    #传入格式字符串转为html
 # from app01.utils.pagination import Pagination    #导入封装的分页功能
 # from django.db.models import Q
+
+
+
+
+# class DSerializer(serializers.ModelSerializer):
+
+#     class Meta:
+#             model= t3
+#             fields= '__all__'
+
+# class view(ModelViewSet):
+#     queryset= t3.objects.all()
+#     serializer_class= DSerializer
+
+
+
+
 
 # # Create your views here.
 
@@ -116,8 +238,3 @@
 
 
 #     return render(req,"test.html",{"q1": q1 })
-
-
-
-
-

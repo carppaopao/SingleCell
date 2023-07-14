@@ -28,8 +28,6 @@ class t3(models.Model):
         managed = True
         db_table = 't3'
 
-
-
 class tliver1(models.Model):
     Cell_barcode  = models.CharField(max_length=32)
     cell_type = models.CharField(max_length=20)
@@ -43,12 +41,52 @@ class tliver1(models.Model):
         managed = False
         db_table = 'tliver1'
 
-# create table tliver1(
-#     -> Cell_barcode varchar(32),
-#     -> cell_type varchar(20),
-#     -> zone int,
-#     -> run_id varchar(12),
-#     -> time_point int,   
-#     -> UMAP_X decimal(32,18),
-#     -> UMAP_Y float)default charset=utf8
-#     -> ;
+# class DataSetMeta(models.Model):
+#     dataset_id = models.CharField(primary_key=True, max_length=100)
+#     subdata_id = models.CharField(max_length=100, blank=True, null=True)
+#     dataset_design = models.TextField(blank=True, null=True)
+#     dataset_citation = models.TextField(blank=True, null=True)
+#     data_platform = models.CharField(max_length=100, blank=True, null=True)
+#     data_model = models.CharField(max_length=100, blank=True, null=True)
+#     data_library = models.CharField(max_length=100, blank=True, null=True)
+#     dataset_sample = models.TextField(blank=True, null=True)
+
+#     def __str__(self):
+#         return self.dataset_id
+
+class LiterData(models.Model):
+    Liter_pmid = models.CharField(primary_key=True, max_length=100)
+    Liter_title = models.CharField(max_length=1000, blank=True, null=True)
+    Liter_abstract = models.TextField(blank=True, null=True)
+    Liter_publication = models.TextField(blank=True, null=True)
+    Liter_content = models.TextField(blank=True, null=True)
+    Liter_data = models.TextField(blank=True, null=True)
+    Sample_info = models.TextField(blank=True, null=True)
+    Species = models.CharField(max_length=1000, blank=True, null=True)
+    Tissue = models.CharField(max_length=1000, blank=True, null=True)
+    Number_cells = models.CharField(max_length=100, blank=True, null=True)
+    Cell_types = models.TextField(blank=True, null=True)
+    Method = models.CharField(max_length=1000, blank=True, null=True)
+    Markers = models.TextField(blank=True, null=True)
+    Note = models.TextField(blank=True, null=True)
+
+    def __self__(self):
+        return self.Liter_pmid
+    class Meta:
+        managed = False 
+        db_table = 'celldb_literaturemeta'
+
+    def __self__(self):
+        return self.PMID
+
+class UploadedFile(models.Model):
+    file = models.FileField(upload_to='data')
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    size = models.CharField(max_length=20)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    def __self__(self):
+        return self.name
+    class Meta:
+        managed = False
+        db_table = 'celldb_uploadedfile'

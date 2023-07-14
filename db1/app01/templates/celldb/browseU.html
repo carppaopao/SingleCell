@@ -1,0 +1,346 @@
+{% extends 'celldb/base.html' %} {% load static %} {% block content %}
+<link href="{% static 'celldb/css/cdn.datatables.net_1.13.4_css_dataTables.bootstrap5.min.css' %}" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+<style>
+  .divset1 {
+    display: flex;
+  }
+</style>
+
+
+<!-- 表格数据 -->
+<div class="divset1">
+  <div class="card col-md-3">
+    <div class="col-md-12">
+      <div style="display: flex; margin-top: 20px;">
+        <label for="SelectLiter" style="margin-right: 5px;">Literid Choose</label>
+
+
+        <select class="form-select" aria-label="Default select example" id="SelectLiter"
+          style="width: 150px; height: 40px;">
+          <option value=''>All</option>
+          
+        </select>
+
+
+
+
+
+      </div>
+      <hr>
+      <div>
+        <label for="cellTypeFilter">Type</label>
+        <select id="cellTypeFilter" class="mb-2" style="width: 25%">
+          <option value="">All</option>
+
+        </select>
+      </div>
+      <div>
+        <label for="min" style="font-size: 4px">Min X</label>
+        <input type="text" style="width: 50px" id="min" name="min" />
+        <label for="max" style="font-size: 4px">Max X</label>
+        <input type="text" style="width: 50px" id="max" name="max" />
+
+      </div>
+      <div>
+        <button id="downloadBtn" class="btn btn-primary ">Download Data</button>
+
+      </div>
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+  <div style="width: 50px;"></div>
+  <div class="card col-md-8">
+
+    <div class="card-body">
+      <div class="container">
+
+        <div class="row justify-content-between">
+          <h3 class="card-title ">Data</h3>
+          <div class="col-md-4 mb-2">
+
+            <button type="button" id="Plot" class="btn btn-primary">Plot</button>
+          </div>
+
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <table id="example" class="table table-hover table-str" style="width: 100%; border-collapse: collapse">
+              <thead>
+                <tr>
+                  <th>Barcode</th>
+                  <th>Type</th>
+                  <th>Zone</th>
+                  <th>Run</th>
+                  <th>Time</th>
+                  <th>X</th>
+                  <th>Y</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"
+  integrity="sha512-WNLxfP/8cVYL9sj8Jnp6et0BkubLP31jhTG9vhL/F5uEZmg5wEzKoXp1kJslzPQWwPT1eyMiSxlKCgzHLOTOTQ=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="{% static 'celldb/js/cdn.datatables.net_1.13.4_js_jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'celldb/js/cdn.datatables.net_1.13.4_js_dataTables.bootstrap5.min.js' %}"></script>
+<script>
+  $(document).ready(function () {
+    var minEl = $("#min");
+    var maxEl = $("#max");
+    // Custom range filtering function
+    DataTable.ext.search.push(function (settings, data, dataIndex) {
+      var min = parseFloat(minEl.val(), 10);
+      var max = parseFloat(maxEl.val(), 10);
+      var x_col = parseFloat(data[6]) || 0; // use data for the x column
+      if (
+        (isNaN(min) && isNaN(max)) ||
+        (isNaN(min) && x_col <= max) ||
+        (min <= x_col && isNaN(max)) ||
+        (min <= x_col && x_col <= max)
+      ) {
+        return true;
+      }
+
+      return false;
+    });
+
+    var table = $("#example").DataTable({
+      ajax: {
+        url: "/api/tran/all",
+        dataSrc: "",
+      },
+      columns: [
+        // { data: "id", orderable: false, searchable: false },
+        {
+          data: "Cell_barcode",
+          orderable: false,
+          searchable: false
+        },
+        {
+          data: "cell_type",
+          orderable: false,
+          searchable: true
+        },
+        {
+          data: "zone",
+          orderable: false,
+          searchable: false
+        },
+        {
+          data: "run_id",
+          orderable: false,
+          searchable: false
+        },
+        {
+          data: "time_point",
+          orderable: false,
+          searchable: false
+        },
+        {
+          data: "UMAP_X",
+          render: function (data) {
+            return parseFloat(data).toExponential(2);
+          },
+          searchable: true,
+        },
+        {
+          data: "UMAP_Y",
+          render: function (data) {
+            return parseFloat(data).toExponential(2);
+          },
+          searchable: true,
+        },
+      ],
+      paging: true,
+      deferRender: true,
+      order: [],
+
+      language: {
+        sortAscending: '<i class="fas fa-sort-up"></i>',
+        sortDescending: '<i class="fas fa-sort-down"></i>',
+      },
+      // 获取所有的 cell_type 数据
+      initComplete: function () {
+        var cellTypes = table.column(1).data().unique().toArray();
+        var selectOptions = cellTypes.map(function (cellType) {
+          return '<option value="' + cellType + '">' + cellType + "</option>";
+        });
+        $("#cellTypeFilter").append(selectOptions.join(""));
+        $("#cellTypeFilter").on("change", function () {
+          var selectedCellType = $(this).val();
+
+          table.column(1).search(selectedCellType).draw();
+        });
+      },
+    });
+
+    minEl.on("input", function () {
+      table.draw();
+    });
+    maxEl.on("input", function () {
+      table.draw();
+    });
+  });
+</script>
+
+<script>
+  $(document).ready(function () {
+    // 添加按钮点击事件处理函数
+    $("#downloadBtn").click(function () {
+      // 获取当前表格中的数据
+      var table = $("#example").DataTable();
+      var filteredData = table.rows({
+        search: "applied"
+      }).data().toArray();
+
+      // 执行下载操作，可以根据需要自定义实现
+      downloadData(filteredData);
+    });
+
+    // 处理绘图事件
+    // 获取选择框和按钮的元素
+    var cellTypeFilter = $("#cellTypeFilter");
+    var plotButton = $("#Plot");
+
+    // 添加点击事件处理程序
+    plotButton.on("click", function () {
+      // 获取选择框的值
+      var selectedCellType = cellTypeFilter.val();
+      window.location.href = "/plot";
+    });
+  });
+
+  // 下载数据的函数
+  function downloadData(data) {
+    // 将数据转换为文本格式
+    var textData = JSON.stringify(data);
+    // 转化为csv格式
+    var csv =
+      "data_id,cell_barcode,cell_type,zone,run_id,time_point,umap_x,umap_y\n";
+    var csvRows = data.map(function (row) {
+      return [
+        row.data_id,
+        row.cell_barcode,
+        row.cell_type,
+        row.zone,
+        row.run_id,
+        row.time_point,
+        row.umap_x,
+        row.umap_y,
+      ].join(",");
+    });
+    csv += csvRows.join("\n");
+    var blob = new Blob([csv], {
+      type: "text/csv;charset=utf-8;",
+    });
+    // 创建一个 <a> 元素
+    var link = document.createElement("a");
+    link.setAttribute("href", URL.createObjectURL(blob));
+    link.setAttribute("download", "data.csv");
+
+    // 模拟点击下载链接
+    link.click();
+  }
+  // ///////////////////////////////////////////////////////////////          literidchange
+
+
+  $(document).ready(function () {
+    $('#SelectLiter').change(function () {
+      var selectedOption = $(this).val(); // 获取被选中的选项的值
+
+      $.ajax({
+        url: '/api/LiterUmap',
+        method: 'GET',
+        data: {
+          selectedOption: selectedOption
+        },
+        success: function (response) {
+
+        },
+      });
+    });
+  });
+</script>
+
+
+<!-- 默认选中option -->
+<!-- <script>
+  window.onload = function() {
+    const selectedValue = sessionStorage.getItem('selectedValue');
+    const selectBox = document.getElementById('SelectLiter'); // 假设为select框的id
+    for (let i = 0; i < selectBox.options.length; i++) {
+      if (selectBox.options[i].value === selectedValue) {
+        selectBox.selectedIndex = i;
+        break;
+      }
+    }
+    sessionStorage.removeItem('selectedValue'); // 清除sessionStorage中的选中值
+  }
+</script> -->
+
+
+
+
+
+<script>
+  $(document).ready(function () {
+    $.ajax({
+      url: 'api/tran/literid', // 后端接口的URL
+      method: 'GET',
+      dataType: 'json',
+      success: function (response) {
+
+
+        // var options = response.options; // 假设后端返回的数据格式为 { "options": ["Option 1", "Option 2", "Option 3"] }
+
+        // var select = $('#mySelect');
+        // $.each(options, function(index, value) {
+        //   select.append($('<option>').text(value).val(value));
+        // });
+      },
+
+
+
+    });
+  });
+</script>
+
+
+<script>
+  fetch('api/tran/literid')
+    .then(response => response.json())
+    .then(data => {
+      // 渲染数据到<select>元素中的<option>选项
+      const selectElement = document.getElementById('SelectLiter');
+
+      data.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.Liter_pmid;
+        option.textContent = item.Liter_pmid;
+        selectElement.appendChild(option);
+      });
+    })
+    .catch(error => console.log(error));
+</script>
+
+
+
+
+
+{% endblock %}

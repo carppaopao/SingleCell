@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <a href="javascript:void(0);" onclick="goToAnalyse(114)">114</a>
+    <script>
+        function goToAnalyse(value) {
+          sessionStorage.setItem('selectedValue', value); // 将选中值存储到sessionStorage
+          window.location.href = 'analyse.html';
+        }
+      </script>
+      
+</body>
+
+</html>
