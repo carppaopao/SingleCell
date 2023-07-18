@@ -16,6 +16,9 @@ urlpatterns = [
     path("test", views.test, name="celldb-test"),
     path("test/liter", views.testli, name="celldb-testli"),
 
+
+    
+
 ]
 
 

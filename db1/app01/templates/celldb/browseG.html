@@ -1,226 +1,24 @@
-{% extends 'celldb/base.html' %}{% load static %}
+{% extends 'celldb/base.html' %} {% load static %} {% block content %}
+
+<div style="height: 100px;"></div>
+<div class="container" >
 
 
 
 
-{% block content %}
-<style>
-  .textbox {
-    background-color: #f8f9fa;
-    /* 设置背景色 */
-    border: 1px solid #ced4da;
-    /* 设置边框 */
-    padding: 10px;
-    /* 设置内边距 */
-    margin-top: 10px;
-    /* 设置上方间距 */
-    margin-bottom: 10px;
-    /* 设置上方间距 */
-  }
-
-  td span {
-    max-width: 200px;
-  }
-</style>
-
-<div class="container-fluid">
-
-  <div class="container-fluid">
-    <div class="row">
-      <!-- 侧边栏 -->
-
-      <!-- 表格 -->
-      <div class="table-responsive" style="max-height: 800px; max-width: 75vw; overflow-y: scroll; margin: auto;">
-        <table class="table" style="width: 100%">
-          <thead>
-            <tr>
-              <th>Liter_pmid</th>
-              <th>Liter_title</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for item in liter %}
-            <tr>
-              <td class="link" onclick="redirectToLink('{{ item.Liter_pmid }}')">
-                {{ item.Liter_pmid }}
-              </td>
-              <td style="cursor: pointer">
-                <p text-decoration: underline; style="max-width: 200px" class="d-inline-block text-truncate openModalLink" data-bs-toggle="modal"
-                data-bs-target="#literModal" 
-
-                data-id="{{ item.Liter_pmid }}"
-                data-title="{{ item.Liter_title }}" 
-                data-abstract="{{ item.Liter_abstract }}"
-                data-publication="{{item.Liter_publication }}" 
-                data-content="{{ item.Liter_content }}"
-                data-data="{{ item.Liter_data }}"
-                data-info="{{ item.Sample_info }}"
-                data-species="{{ item.Species }}"
-                data-tissue="{{ item.Tissue }}"
-                data-cell="{{ item.Number_cells }}"
-                data-type="{{ item.Cell_types }}"
-                data-method="{{ item.Method }}"
-                data-markers="{{ item.Markers }}"
-                data-note="{{ item.Note }}">
-                  {{ item.Liter_title }}
-                </p>
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Modal -->
-  {% for item in liter %}
-
-  <div class="modal fade" id="literModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-
-          <b>liter-id:</b><span id="id"></span><hr>
-          <b>liter-abstract:</b><span id="abstract"></span><hr>
-          <b>liter-pulication:</b><span id="publication"></span><hr>
-          <b>liter-content:</b><span id="content"></span><hr>
-          <b>liter-data:</b><span id="data"></span><hr>
-          <b>liter-info:</b><span id="info"></span><hr>
-          <b>liter-species:</b><span id="species"></span><hr>
-          <b>liter-tissue:</b><span id="tissue"></span><hr>
-          <b>liter-number_cells:</b><span id="cell"></span><hr>
-          <b>liter-type:</b><span id="type"></span><hr>
-          <b>liter-method:</b><span id="method"></span><hr>
-          <b>liter-markers:</b><span id="markers"></span><hr>
-          <b>liter-note:</b><span id="note"></span><hr>
-
-
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
-    </div>
+  <div class="col-md-12 text-center" style="display: flex;">
+    <form action="/api/search/" method="get">
+    <input id="searchbox" name="q" type="text" placeholder="gene symbol name..." style=" width:350px; margin-right: 10px; margin-left: 300px;">
+    <button class="btn btn-primary" style="font-size:18px;" type="submit"><i class="fa-solid fa-magnifying-glass" style="margin-right:5px"></i>搜索</button>
+</form>
   </div>
 
-    {% endfor %}
 
 
-  {% endblock %}
-  {% block scripts %}
-
-  <!-- 查看数据模态框 -->
-  <!-- <script>
-    $(document).ready(function () {
-      var id;
-      $("#literModal").on("show.bs.modal", function (event) {
-        var triggerElement = $(event.relatedTarget);
-        var title = triggerElement.data("title");
-        var abstract = triggerElement.data("abstract");
-        id = triggerElement.data("id");
-        var modal = $(this);
-        modal.find(".modal-title").text(title);
-        modal.find("#literDetails").text(abstract);
-      });
-
-    });
-  </script> -->
-
-<script>
-// $(document).ready(function() {
-//   $('#literModal').click(function() {
-//     使用模板中的数据渲染模态框
-//     $('#modalTitle').text('{{ data.modal_title }}');
-//     $('#modalContent').text('{{ data.modal_content }}');
-//     $('#myModal').modal('show');
-//   });
-// });
-
-$('.openModalLink').click(function() {
-
-    var id = $(this).data('id');
-    var title = $(this).data('title');
-    var abstract = $(this).data('abstract');
-    var publication = $(this).data('publication');
-    var content = $(this).data('content');
-    var data = $(this).data('data');
-    var info = $(this).data('info');
-    var species = $(this).data('species');
-    var tissue = $(this).data('tissue');
-    var cell = $(this).data('cell');
-    var type = $(this).data('type');
-    var method = $(this).data('method');
-    var markers = $(this).data('markers');
-    var note = $(this).data('note');
-
-    // 使用模板中的数据渲染模态框
-    $('.modal-title').html(title);
-    $('.modal-body #id').html('&nbsp;&nbsp;&nbsp;' + id);
-    $('.modal-body #abstract').html('&nbsp;&nbsp;&nbsp;' + abstract);
-    $('.modal-body #publication').html('&nbsp;&nbsp;&nbsp;' + publication);
-    $('.modal-body #content').html('&nbsp;&nbsp;&nbsp;' + content);
-    $('.modal-body #data').html('&nbsp;&nbsp;&nbsp;' + data);
-    $('.modal-body #info').html('&nbsp;&nbsp;&nbsp;' + info);
-    $('.modal-body #species').html('&nbsp;&nbsp;&nbsp;' + species);
-    $('.modal-body #tissue').html('&nbsp;&nbsp;&nbsp;' + tissue);
-    $('.modal-body #cell').html('&nbsp;&nbsp;&nbsp;' + cell);
-    $('.modal-body #type').html('&nbsp;&nbsp;&nbsp;' + type);
-    $('.modal-body #method').html('&nbsp;&nbsp;&nbsp;' + method);
-    $('.modal-body #markers').html('&nbsp;&nbsp;&nbsp;' + markers);
-    $('.modal-body #note').html('&nbsp;&nbsp;&nbsp;' + note);
-
-    // $('.modal-body hr').next().text('content - ' + modalContent);
-
-    // 根据链接中的 data-bs-target 属性来显示对应的模态框
-    var targetModal = $(this).attr('data-bs-target');
-    $(targetModal).modal('show');
-  });
-</script>
-
-  <!-- 增加数据模态框 -->
-  <!-- <script>
-    function addData() {
-      var form = $("#addDataForm");
-      var url = "api/liter/"; // 替换为Django视图URL
-      var liter_pmid = $("#liter_pmid").val();
-      var liter_title = $("#liter_title").val();
-
-      var data = {
-        Liter_pmid: liter_pmid,
-        Liter_title: liter_title,
-        // Add other fields as needed
-      };
-      $.ajax({
-        type: "POST",
-        url: url,
-        data: JSON.stringify(data),
-        contentType: "application/json",
-        success: function (response) {
-          $("#addDataModal").modal("hide");
-          location.reload(); // 示例：刷新页面
-        },
-        error: function (xhr, status, error) {
-          // 处理错误响应
-          console.log(error);
-        },
-      });
-    }
-  </script> -->
-
-  <!-- 跳转到pmid链接 -->
-  <script>
-    function redirectToLink(pmid) {
-      var url = "https://pubmed.ncbi.nlm.nih.gov/" + pmid + "/";
-      window.location.href = url;
-    }
-  </script>
 
 
-  {% endblock %}
+</div>
+{% endblock %} {% block scripts %}
+
+
+{% endblock %}

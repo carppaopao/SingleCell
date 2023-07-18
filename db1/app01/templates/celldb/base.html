@@ -32,6 +32,13 @@
   <link rel="stylesheet" type="text/css" href="{% static 'celldb/css/bootstrap5.3/bootstrap.min.css' %}" />
   <!-- <link rel="stylesheet" type="text/css" href="{% static 'celldb/css/main.css' %}" /> -->
 
+<!-- Font Awesome -->
+<link rel="stylesheet" type="text/css" href="{% static 'plugins/fontawesome-6.0.0/css/all.min.css' %}" />
+
+
+
+
+
 
   {% block styles %}
   {% endblock %}
@@ -44,23 +51,6 @@
 
 <body>
   <header class="site-header">
-    <!-- <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
-      <div class="container">
-        <a class="navbar-brand mr-4" href="{% url 'celldb-home' %}">SingleCellDB</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
-          aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarToggle">
-          <div class="navbar-nav mr-auto">
-            <ul class="navbar-nav mr-auto navset">
-              <li class="nav-item">
-                <a class="nav-item nav-link" href="{% url 'celldb-overview' %}"> <svg xmlns="http://www.w3.org/2000/svg"
-                    width="16" height="16" fill="currentColor" class="bi bi-book-fill svgicon" viewBox="0 0 16 16">
-                    <path
-                      d="M8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z" />
-                  </svg>Overview </a>
-              </li> -->
 
     <nav class="navbar navbar-expand-lg " style="background-color: #e3f2fd;">
       <div class="container">
@@ -82,7 +72,7 @@
             </li>
 
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+              <a class="nav-link dropdown-toggle dropdown-toggleB" href="#" role="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                   class="bi bi-search svgicon" viewBox="0 0 16 16">
@@ -117,7 +107,7 @@
                 </svg>Upload</a>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+              <a class="nav-link dropdown-toggle dropdown-toggleP" href="#" role="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                   class="bi bi-brush-fill svgicon" viewBox="0 0 16 16">
@@ -141,7 +131,7 @@
 
 
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'celldb-download' %}">
+              <a class="nav-link " href="{% url 'celldb-download' %}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                   class="bi bi-cloud-download-fill svgicon" viewBox="0 0 16 16">
                   <path fill-rule="evenodd"
@@ -220,16 +210,17 @@
 
       // 获取当前页面的URL
       var currentUrl = window.location.href;
+      console.log(currentUrl);
       if (currentUrl.includes("browseU") || currentUrl.includes("browseG")) {
         $(".dropdown-toggleB").addClass("active");
       }
 
 
-      if (currentUrl.includes("plotU") || currentUrl.includes("plotR")) {
+      if (currentUrl.includes("plot") || currentUrl.includes("plotR")) {
         $(".dropdown-toggleP").addClass("active");
       }
       // 获取导航项的链接并遍历
-      var navLinks = document.querySelectorAll('.navset a');
+      var navLinks = document.querySelectorAll('.nav-item a');
       navLinks.forEach(function (navLink) {
         if (navLink.href === currentUrl) {
           navLink.classList.add('active');

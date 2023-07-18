@@ -15,7 +15,8 @@ urlpatterns = [
     path("tran/all", views.getTran_all, name="api-tran-all"),
 
 
-
+    #search
+    path('search',views.search),
 
 
 

@@ -1,20 +1,22 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render,redirect
 from .models import tliver1, LiterData
+from . import models
+
 
 def home(request):
-    logs = [
-        {"date": "5.24~5.31", "content": "使用Django框架建立网站的雏形"},
-        {"date": "6.1", "content": "实现了在后端对Single_cell_Meta_data.txt中的数据进行绘制，并传回前端页面"},
-        {"date": "6.3", "content": "学习使用JavaScript，以便处理数据格式"},
-        {"date": "6.4~6.6", "content": "使用echarts.js绘图"},
-        {"date": "6.7~6.10", "content": "分页功能实现"},
-        {"date": "6.11~15", "content": "尝试前后端分离"},
-        {"date": "6.16~6.20", "content": "完善搜索功能和分页按钮"},
-        {"date": "6.21~6.27", "content": "使用Databales插件;增加了下载数据功能;Plot增加了筛选功能;上传了summary文件中的数据"},
-        {"date": "6.28~7.5", "content": "对数据过滤，允许对数据进行添加或删除"},
-    ]
-    return render(request, "celldb/home.html", {"logs": logs})
+    # logs = [
+    #     {"date": "5.24~5.31", "content": "使用Django框架建立网站的雏形"},
+    #     {"date": "6.1", "content": "实现了在后端对Single_cell_Meta_data.txt中的数据进行绘制，并传回前端页面"},
+    #     {"date": "6.3", "content": "学习使用JavaScript，以便处理数据格式"},
+    #     {"date": "6.4~6.6", "content": "使用echarts.js绘图"},
+    #     {"date": "6.7~6.10", "content": "分页功能实现"},
+    #     {"date": "6.11~15", "content": "尝试前后端分离"},
+    #     {"date": "6.16~6.20", "content": "完善搜索功能和分页按钮"},
+    #     {"date": "6.21~6.27", "content": "使用Databales插件;增加了下载数据功能;Plot增加了筛选功能;上传了summary文件中的数据"},
+    #     {"date": "6.28~7.5", "content": "对数据过滤，允许对数据进行添加或删除"},
+    # ]
+    return render(request, "celldb/home.html", )
 
 def plotScatter(request):
     return render(request, "celldb/plotScatter.html")
@@ -31,6 +33,9 @@ def browseU(request):
     # paginator = Paginator(data, items_per_page)
     # page_number = request.GET.get("page")
     # page_obj = paginator.get_page(page_number)
+
+    # liter = LiterData.objects.all()
+    # data = ""
     liter = LiterData.objects.all()
     
 
@@ -38,10 +43,22 @@ def browseU(request):
 
 
 
-def browseG(request):
-    liter = LiterData.objects.all()
-    data = ""
-    return render(request, "celldb/browseG.html", {"data": data, "liter":liter})
+def browseG(req):
+
+
+    dict ={}
+    search = req.GET.get("q","")
+    # if search:
+    #     dict ["zone"]= search
+    # queryset = models.tliver.objects.filter(**dict).order_by("-cell_type").values()
+
+    search = req.GET.get("q","")
+    field = req.GET.get("field")
+
+
+    queryset = models.tliver1.objects.all().order_by("-cell_type").values()
+
+    return render(request, "celldb/browseG.html")
 
 
 def upload(request):

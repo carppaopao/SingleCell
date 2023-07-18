@@ -163,3 +163,12 @@ def browseUmap_view(req):
 
 #     # return Response(serializer.data)
 #     return redirect("celldb-browseG")
+
+
+@api_view(["GET"])
+def search(req):
+    q = req.GET.get('q')
+    print(q)
+    data = LiterData.objects.values()
+    serializer = LiterIdSer(data, many=True)
+    return Response(serializer.data)
