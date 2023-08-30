@@ -1,0 +1,205 @@
+{% extends 'celldb/base.html' %} {% load static %} {% block content %}
+
+<div style="height: 100px;"></div>
+<div class="container">
+
+    <div class="jumbotron" style="padding-top:20px; padding-bottom:15px;padding-left: 20px; background-color:#F0F8FF">
+
+        <h1>Search</h1>
+        <p>搜索来自x个scRNA-seq数据集的数据查找表达特定一组基因的细胞类型。
+        </p>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center" style="margin-top:100px">
+        </div>
+    </div>
+</div>
+
+<a href="{% url 'celldb-search' %}" class="link plot" style="margin-left: 100px;">SEARCH GENE</a>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <p class="text-muted" style="margin-bottom:20px">选择一个细胞类型<span data-toggle="tooltip" data-placement="top"
+                    data-html="true" title=""></span></p>
+        </div>
+    </div>
+    <form id="searchform" name="searchform">
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <select name="typeoptions" id="typeoptions" style="width:600px" >
+                    <option value="">请选择细胞类型</option>
+
+                </select>
+                <br><span id="errormsg" class="form-text" style="color:red; visibility:hidden"></span>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 text-center" style="margin-top:20px">
+                <label for="speciesbox" style="margin-right:3px">Species</label>
+
+                <select id="speciesbox" name="speciesbox">
+                    <option value="1">Mouse and human</option>
+                    <option value="2">Mouse</option>
+                    <option value="3">Human</option>
+                </select>
+
+                <br>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-12 text-center" style="margin-top:20px">
+            </div>
+
+            <div class="col-md-12 text-center" style="margin-top:20px ">
+                <!-- 按钮的样式 -->
+                <style>
+                    .btn {
+                        background-color: DodgerBlue;
+                        border: none;
+                        color: white;
+                        font-size: 14px;
+                        cursor: pointer;
+                    }
+
+                    /* Darker background on mouse-over */
+                    .btn:hover {
+                        background-color: RoyalBlue;
+                    }
+                </style>
+
+
+            </div>
+        </div>
+    </form>
+
+
+    <!-- <div class="row" >
+    <div class="col-md-12 text-center" style="margin-top:20px">
+      <button class="btn btn-primary" style="font-size:18px; margin-top:10px; width: 100px; margin: auto;"
+        id="plotbutton" name="plotbutton" onclick="plot();"><i class="fa-solid fa-pen" style="margin-right:5px"></i>
+        plot</button>
+    </div>
+  </div> -->
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center" style="margin-top:100px">
+            </div>
+        </div>
+
+
+        <table class="table" id="table">
+            <thead>
+                <tr>
+                    <th scope="col">gene</th>
+                    <th scope="col">liter</th>
+                    <th scope="col">species</th>
+                    <th scope="col">plot</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <!-- <tr>
+          <td id="genename">geneA</td>
+          <td id="idname">1234567</td>
+          <td>liver</td>
+          <td><a href="{% url 'celldb-plot' %}?" target="_blank">1</a></td>
+        </tr> -->
+
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+
+{% endblock %} {% block scripts %}
+
+<!-- 搜索功能的提交部分 -->
+<script>
+    $('#searchform').submit(function (event) {
+        // prevent default browser behaviour
+        event.preventDefault();
+    });
+
+    function searchbtn() {
+        var genes = encodeURI($('#searchbox').val());
+        var species = encodeURI($('#speciesbox').val());
+
+        // var method = document.getElementById('methodbox').value;
+
+        if (genes != '') {
+            search_url = "{% url 'celldb-search' %}" + "?gene=" + genes + "&species=" + species;
+            window.location = search_url;
+        } else {
+            //please type a gene symbol or a list of gene symbols separated by comma, for example: sox2,sox9,sox10
+            $('#errormsg').css('visibility', 'visible');
+            $('#errormsg').html(
+                'please type a gene symbol or a list of gene symbols separated by comma, for example: sox2,alb');
+        }
+        return false;
+    }
+
+</script>
+
+<script>
+    // 搜索功能
+    $(document).ready(function() {
+  // 通过 AJAX GET 请求从后端获取数据
+  $.ajax({
+    url: 'api/alltype',
+    type: 'GET',
+    success: function(data) {
+      // 获取到数据后，在前端渲染选项
+      var typeOptions = $('#typeoptions');
+      
+      // 清空原有的选项
+      typeOptions.empty();
+      
+      // 遍历数据，生成选项并添加到选择框中
+      for (var i = 0; i < data.length; i++) {
+        var option = $('<option></option>').text(data[i]);
+        typeOptions.append(option);
+      }
+    },
+    error: function() {
+      // 处理错误情况
+      console.log('Error occurred while fetching data.');
+    }
+  });
+});
+</script>
+
+
+<!-- 默认选中功能 -->
+<script>
+    $(document).ready(function () {
+        // 获取 URL 参数值
+        const urlParams = new URLSearchParams(window.location.search);
+        const speciesParam = urlParams.get('species');
+        const geneParam = urlParams.get('gene');
+
+
+        // 设置选中项
+        if (speciesParam) {
+            $('#speciesbox').val(speciesParam);
+        }
+
+        if (geneParam) {
+            $('#searchbox').val(geneParam);
+        }
+
+    });
+</script>
+
+
+
+{% endblock %}

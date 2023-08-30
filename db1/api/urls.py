@@ -14,20 +14,16 @@ urlpatterns = [
     path("tran/<int:id>", views.getTran_detail),
     path("tran/all", views.getTran_all, name="api-tran-all"),
 
-
-    #search
-    path('search',views.search),
-
-
-
-
-
-
+    path("sea/",views.search,name='api-search'),
+    path("seaexcel/",views.searchexcel,name='api-searchexcel'),
+    path("seaty/",views.searchtype,name='api-searchtype'),
+    path("dld/", views.download, name="api-download"),
+    path("dldexcel/", views.downloadexcel, name="api-downloadexcel"),
 
     path("LiterUmap", views.browseUmap_view),
     path("tran/literid", views.getTran_id),
     # path("test/liter/", views.gettest_id),
-
+    path("tran/all/", views.getTran_all, name="api-tran-all"),
 
     
     # path(

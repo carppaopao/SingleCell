@@ -5,19 +5,22 @@ from . import views
 
 urlpatterns = [
     path("", views.home, name="celldb-home"),
-    path("browseU", views.browseU, name="celldb-browseU"),
-    path("browseG", views.browseG, name="celldb-browseG"),
+    # path("browseU", views.browseU, name="celldb-browseU"),
     path("upload", views.upload, name="celldb-upload"),
     path("download", views.download, name="celldb-download"),
     path("overview", views.overview, name="celldb-overview"),
-    path("plot", views.plotScatter, name="celldb-plot"),
+    path("plot/", views.plotScatter, name="celldb-plot"),
+    path("plot/local", views.plotLocal, name="celldb-plot-local"),
+    path("plot/r", views.plotR, name="celldb-plot-r"),
     path('base',views.base),
-    path('analyse',views.analyse),
+    path('analyse',views.analyse, name="celldb-analyse"),
     path("test", views.test, name="celldb-test"),
-    path("test/liter", views.testli, name="celldb-testli"),
+    path("runcode/", views.runCode, name="celldb-runcode"),
+    path("search", views.search, name='celldb-search'),
+    path("browseU/", views.browseU, name='celldb-browseU'),
+    path("browseE/", views.browseE, name='celldb-browseE'),
+    path("searchcelltype/", views.searchcelltype, name='celldb-searchtype')
 
-
-    
 
 ]
 

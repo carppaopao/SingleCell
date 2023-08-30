@@ -7,7 +7,11 @@
     }
 </style>
 
-<div class="fixed-table-container" style="padding-bottom: 0px;">
+<div class="fixed-table-container container" style="padding-bottom: 0px;">
+    <div class="row">
+        <div class="col-md-12 text-center" style="margin-top:50px">
+        </div>
+      </div>
     <div class="fixed-table-header" style="display: none;">
         <table></table>
     </div>
@@ -15,28 +19,23 @@
         <div class="fixed-table-loading table table-hover responsive no-wrap" style="top: 36.6667px;">
             <span class="loading-wrap">
                 <span class="loading-text" style="font-size: 32px;">Gene Expression Matrices</span>
-                <span class="animation-wrap"><span class="animation-dot"></span></span>
+
+
             </span>
 
         </div>
+        <div class="row">
+            <div class="col-md-12 text-center" style="margin-top:30px">
+            </div>
+          </div>
         <table id="geneMatrixTable" class="table table-hover responsive no-wrap">
             <thead class="">
                 <tr>
                     <th style="width: 10px; " data-field="projectId">
-                        <div class="th-inner ">Project ID</div>
-
-                    </th>
-                    <th style="width: 10px; " data-field="sampleId">
-                        <div class="th-inner ">Sample ID</div>
-
-                    </th>
-                    <th style="width: 35px; " data-field="dataLink">
-                        <div class="th-inner ">Original Metadata</div>
-
+                        <div class="th-inner ">ProjectID or DataID</div>
                     </th>
                     <th style="width: 35px; " data-field="expMatrix">
-                        <div class="th-inner ">Expression Matrix</div>
-
+                        <div class="th-inner ">Expression Matrix(zip)</div>
                     </th>
 
                 </tr>
@@ -44,44 +43,23 @@
             <tbody>
                 <tr data-index="0">
                     <td style="width: 10px; ">MCC-001</td>
-                    <td style="width: 10px; ">MCC-001-01-1A</td>
-                    <td style="width: 35px; "><a href="/cancerscem/downloads/metaInfor/MCC-001-01-1A.SraRunInfo.xlsx"
-                            download="MCC-001-01-1A.SraRunInfo.xlsx"> <svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                height="16" fill="currentColor" class="bi bi-download svgicon" viewBox="0 0 16 16">
-                                <path
-                                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
-                                <path
-                                    d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
-                            </svg>MCC-001-01-1A.SraRunInfo.xlsx <span class="glyphicon glyphicon-save"
-                                style="color: #337AB7"></span></a></td>
                     <td style="width: 35px; "><a
-                            href="/cancerscem/downloads/expMatrixes/MCC-001-01-1A.gene.expression.matrix.tsv.zip"
-                            download="MCC-001-01-1A.gene.expression.matrix.tsv.zip"> <svg
+                            href="{% static 'hg19.zip' %}" download> <svg
                                 xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-download svgicon" viewBox="0 0 16 16">
                                 <path
                                     d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
                                 <path
                                     d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
-                            </svg>MCC-001-01-1A.gene.expression.matrix.tsv.zip
+                            </svg>example.gene.expression.matrix.tsv.zip
                             <span class="glyphicon glyphicon-save" style="color: #337AB7"></span></a></td>
 
                 </tr>
                 <tr data-index="1">
                     <td style="width: 10px; ">MCC-001</td>
-                    <td style="width: 10px; ">MCC-001-02-1A</td>
-                    <td style="width: 35px; "><a href="/cancerscem/downloads/metaInfor/MCC-001-02-1A.SraRunInfo.xlsx"
-                            download="MCC-001-02-1A.SraRunInfo.xlsx"> <svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                height="16" fill="currentColor" class="bi bi-download svgicon" viewBox="0 0 16 16">
-                                <path
-                                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
-                                <path
-                                    d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
-                            </svg>MCC-001-02-1A.SraRunInfo.xlsx <span class="glyphicon glyphicon-save"
-                                style="color: #337AB7"></span></a></td>
-                    <td style="width: 35px; "><a
-                            href="/cancerscem/downloads/expMatrixes/MCC-001-02-1A.gene.expression.matrix.tsv.zip"
-                            download="MCC-001-02-1A.gene.expression.matrix.tsv.zip"> <svg
+
+                    <td style="width: 35px; "><a 
+                        href="{% static 'hg19.zip' %}" download>  <svg
                                 xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-download svgicon" viewBox="0 0 16 16">
                                 <path
@@ -89,96 +67,16 @@
                                 <path
                                     d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
                             </svg>MCC-001-02-1A.gene.expression.matrix.tsv.zip
-                            <span class="glyphicon glyphicon-save" style="color: #337AB7"></span></a></td>
+                            <span class="glyphicon glyphicon-save" style="color: #337AB7"></span></></td>
 
                 </tr>
-                <tr data-index="2">
-                    <td style="width: 10px; ">MCC-002</td>
-                    <td style="width: 10px; ">MCC-002-01-1A</td>
-                    <td style="width: 35px; "><a href="/cancerscem/downloads/metaInfor/MCC-002-01-1A.SraRunInfo.xlsx"
-                            download="MCC-002-01-1A.SraRunInfo.xlsx"> <svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                height="16" fill="currentColor" class="bi bi-download svgicon" viewBox="0 0 16 16">
-                                <path
-                                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
-                                <path
-                                    d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
-                            </svg>MCC-002-01-1A.SraRunInfo.xlsx <span class="glyphicon glyphicon-save"
-                                style="color: #337AB7"></span></a></td>
-                    <td style="width: 35px; "><a
-                            href="/cancerscem/downloads/expMatrixes/MCC-002-01-1A.gene.expression.matrix.tsv.zip"
-                            download="MCC-002-01-1A.gene.expression.matrix.tsv.zip"> <svg
-                                xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                class="bi bi-download svgicon" viewBox="0 0 16 16">
-                                <path
-                                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
-                                <path
-                                    d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
-                            </svg>MCC-002-01-1A.gene.expression.matrix.tsv.zip
-                            <span class="glyphicon glyphicon-save" style="color: #337AB7"></span></a></td>
 
-                </tr>
-                <tr data-index="3">
-                    <td style="width: 10px; ">MCC-002</td>
-                    <td style="width: 10px; ">MCC-002-02-1A</td>
-                    <td style="width: 35px; "><a href="/cancerscem/downloads/metaInfor/MCC-002-02-1A.SraRunInfo.xlsx"
-                            download="MCC-002-02-1A.SraRunInfo.xlsx"> <svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                height="16" fill="currentColor" class="bi bi-download svgicon" viewBox="0 0 16 16">
-                                <path
-                                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
-                                <path
-                                    d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
-                            </svg>MCC-002-02-1A.SraRunInfo.xlsx <span class="glyphicon glyphicon-save"
-                                style="color: #337AB7"></span></a></td>
-                    <td style="width: 35px; "><a
-                            href="/cancerscem/downloads/expMatrixes/MCC-002-02-1A.gene.expression.matrix.tsv.zip"
-                            download="MCC-002-02-1A.gene.expression.matrix.tsv.zip"> <svg
-                                xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                class="bi bi-download svgicon" viewBox="0 0 16 16">
-                                <path
-                                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
-                                <path
-                                    d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
-                            </svg>MCC-002-02-1A.gene.expression.matrix.tsv.zip
-                            <span class="glyphicon glyphicon-save" style="color: #337AB7"></span></a></td>
 
-                </tr>
-                <tr data-index="4">
-                    <td style="width: 10px; ">LUAD-003</td>
-                    <td style="width: 10px; ">LUAD-003-01-1A</td>
-                    <td style="width: 35px; "><a href="/cancerscem/downloads/metaInfor/LUAD-003-01-1A.SraRunInfo.xlsx"
-                            download="LUAD-003-01-1A.SraRunInfo.xlsx"> <svg xmlns="http://www.w3.org/2000/svg"
-                                width="16" height="16" fill="currentColor" class="bi bi-download svgicon"
-                                viewBox="0 0 16 16">
-                                <path
-                                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
-                                <path
-                                    d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
-                            </svg>LUAD-003-01-1A.SraRunInfo.xlsx <span class="glyphicon glyphicon-save"
-                                style="color: #337AB7"></span></a></td>
-                    <td style="width: 35px; "><a
-                            href="/cancerscem/downloads/expMatrixes/LUAD-003-01-1A.gene.expression.matrix.tsv.zip"
-                            download="LUAD-003-01-1A.gene.expression.matrix.tsv.zip"> <svg
-                                xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                class="bi bi-download svgicon" viewBox="0 0 16 16">
-                                <path
-                                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
-                                <path
-                                    d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
-                            </svg>LUAD-003-01-1A.gene.expression.matrix.tsv.zip
-                            <span class="glyphicon glyphicon-save" style="color: #337AB7"></span></a></td>
-
-                </tr>
 
             </tbody>
         </table>
     </div>
-    <div class="fixed-table-footer">
-        <table>
-            <thead>
-                <tr></tr>
-            </thead>
-        </table>
-    </div>
+
 </div>
 
 

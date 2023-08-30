@@ -1,0 +1,103 @@
+{% extends 'celldb/base.html' %} {% load static %} {% block content %}
+<link
+  href="{% static 'celldb/css/cdn.datatables.net_1.13.4_css_dataTables.bootstrap5.min.css' %}"
+  rel="stylesheet"
+/>
+<!-- <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+/> -->
+
+<!-- 自定义样式 -->
+<!-- <style>
+  /* 排序图标覆盖 */
+  table.dataTable thead .sorting:before,
+  table.dataTable thead .sorting_asc:before,
+  table.dataTable thead .sorting_desc:before,
+  table.dataTable thead .sorting_asc_disabled:before,
+  table.dataTable thead .sorting_desc_disabled:before {
+    right: 1em;
+    content: "" !important; /* 替换为 Font Awesome 的图标代码 */
+  }
+
+  table.dataTable thead .sorting:after,
+  table.dataTable thead .sorting_asc:after,
+  table.dataTable thead .sorting_desc:after,
+  table.dataTable thead .sorting_asc_disabled:after,
+  table.dataTable thead .sorting_desc_disabled:after {
+    right: 0.5em;
+    content: "" !important;
+  }
+
+</style> -->
+
+<!-- 表格数据 -->
+<div class="card">
+  <div class="card-body">
+    <div class="container">
+      <div class="row justify-content-between">
+        <h3 class="card-title col-md-2 mb-2">Data</h3>
+        <div class="col-md-4 mb-2">
+          <label for="cellTypeFilter">Type</label>
+          <select id="cellTypeFilter" class="mb-2" style="width: 25%">
+            <option value="">All</option>
+            <!-- <option value="Hep">Hep</option>
+            <option value="HSC">HSC</option>
+            <option value="cDC">cDC</option>
+            <option value="pDC">pDC</option>
+            <option value="Monocytes">Monocytes</option>
+            <option value="KC">KC</option>
+            <option value="Macrophages">Macrophages</option>
+            <option value="Endo">Endo</option>
+            <option value="B">B</option>
+            <option value="T+NK">T+NK</option>
+            <option value="Chol">Chol</option> -->
+          </select>
+          <button type="button" id="Plot" class="btn btn-primary">Plot</button>
+        </div>
+        <div class="col-md-4">
+          <div class="input-row">
+            <label for="min" style="font-size: 4px">Min X</label>
+            <input type="text" style="width: 50px" id="min" name="min" />
+            <label for="max" style="font-size: 4px">Max X</label>
+            <input type="text" style="width: 50px" id="max" name="max" />
+          </div>
+        </div>
+        <button
+          id="downloadBtn"
+          class="btn btn-primary col-md-2 mb-2"
+          style="height: 50%; width: 50%"
+        >
+          Download Data
+        </button>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <table
+            id="example"
+            class="table table-hover table-str"
+            style="width: 100%; border-collapse: collapse"
+          >
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Barcode</th>
+                <th>Type</th>
+                <th>Zone</th>
+                <th>Run</th>
+                <th>Time</th>
+                <th>X</th>
+                <th>Y</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %} {% block script %}
+
+{% endblock %}

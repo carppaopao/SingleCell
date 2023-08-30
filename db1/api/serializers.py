@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from django import forms
-from app01.models import t3,tliver,tliver1,LiterData,UploadedFile
+from app01.models import t3,tliver,tliver1,LiterData,UploadedFile,countsGSE137537,HumanLiter,AllLiter,MouseLiter
 
-
+# tranmeta=tliver1
 class tliver1Ser(serializers.ModelSerializer):
     class Meta:
         model = tliver1
@@ -32,6 +32,21 @@ class LiterDataSer(serializers.ModelSerializer):
     class Meta:
         model = LiterData
         fields = "__all__"
+
+class counts137537Ser(serializers.ModelSerializer):
+    class Meta:
+        model = countsGSE137537
+        fields = "gene","cell","exp"
+
+
+
+class countsSer(serializers.Serializer):
+
+    genename = serializers.CharField()
+    cell = serializers.CharField()
+    exp = serializers.CharField()
+    liter = serializers.CharField()
+    # fields = "gene","cell","exp"
         
 class UploadSer(serializers.ModelSerializer):
     class Meta:
@@ -43,3 +58,10 @@ class LiterIdSer(serializers.ModelSerializer):
     class Meta:
         model = LiterData
         fields = ( 'Liter_pmid' ,)
+
+
+
+class literSer(serializers.ModelSerializer):
+    class Meta:
+        model = AllLiter
+        fields = "__all__"

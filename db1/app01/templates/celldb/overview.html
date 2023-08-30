@@ -36,6 +36,7 @@
             <tr>
               <th>Liter_pmid</th>
               <th>Liter_title</th>
+              <th>LinkBrowse</th>
               <th>LinkPlot</th>
               <th>LinkAnalyse</th>
             </tr>
@@ -47,28 +48,23 @@
                 {{ item.Liter_pmid }}
               </td>
               <td style="cursor: pointer; width: 500px;">
-                <p text-decoration: underline; style="max-width: 400px" class="d-inline-block text-truncate openModalLink" data-bs-toggle="modal"
-                data-bs-target="#literModal" 
-
-                data-id="{{ item.Liter_pmid }}"
-                data-title="{{ item.Liter_title }}" 
-                data-abstract="{{ item.Liter_abstract }}"
-                data-publication="{{item.Liter_publication }}" 
-                data-content="{{ item.Liter_content }}"
-                data-data="{{ item.Liter_data }}"
-                data-info="{{ item.Sample_info }}"
-                data-species="{{ item.Species }}"
-                data-tissue="{{ item.Tissue }}"
-                data-cell="{{ item.Number_cells }}"
-                data-type="{{ item.Cell_types }}"
-                data-method="{{ item.Method }}"
-                data-markers="{{ item.Markers }}"
-                data-note="{{ item.Note }}">
+                <p text-decoration: underline; style="max-width: 400px"
+                  class="d-inline-block text-truncate openModalLink" data-bs-toggle="modal" data-bs-target="#literModal"
+                  data-id="{{ item.Liter_pmid }}" data-title="{{ item.Liter_title }}"
+                  data-abstract="{{ item.Liter_abstract }}" data-publication="{{item.Liter_publication }}"
+                  data-content="{{ item.Liter_content }}" data-data="{{ item.Liter_data }}"
+                  data-info="{{ item.Sample_info }}" data-species="{{ item.Species }}" data-tissue="{{ item.Tissue }}"
+                  data-cell="{{ item.Number_cells }}" data-type="{{ item.Cell_types }}" data-method="{{ item.Method }}"
+                  data-markers="{{ item.Markers }}" data-note="{{ item.Note }}">
                   {{ item.Liter_title }}
                 </p>
               </td>
-              <td><a href="{% url 'celldb-browseU' %}" class="link a1">{{ item.Liter_pmid }}</a></td>
-              <td><button class="btn btn-primary">Analyse</button></td>
+              <td>
+              <button type="button" value="{{item.Liter_pmid}}" class="btn btn-primary browse">
+                Browse
+              </button></td>
+              <td><a class="link plot">Plot</a></td>
+              <td><button class="btn btn-primary analyse">Analyse</button></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -80,7 +76,7 @@
 
 
 
-  
+
   <!-- 模态框 表格详情-->
 
   {% for item in liter %}
@@ -94,21 +90,32 @@
         </div>
         <div class="modal-body">
 
-          <b>liter-id:</b><span id="id"></span><hr>
-          <b>liter-abstract:</b><span id="abstract"></span><hr>
-          <b>liter-pulication:</b><span id="publication"></span><hr>
-          <b>liter-content:</b><span id="content"></span><hr>
-          <b>liter-data:</b><span id="data"></span><hr>
-          <b>liter-info:</b><span id="info"></span><hr>
-          <b>liter-species:</b><span id="species"></span><hr>
-          <b>liter-tissue:</b><span id="tissue"></span><hr>
-          <b>liter-number_cells:</b><span id="cell"></span><hr>
-          <b>liter-type:</b><span id="type"></span><hr>
-          <b>liter-method:</b><span id="method"></span><hr>
-          <b>liter-markers:</b><span id="markers"></span><hr>
-          <b>liter-note:</b><span id="note"></span><hr>
-
-
+          <b>liter-id:</b><span id="id"></span>
+          <hr>
+          <b>liter-abstract:</b><span id="abstract"></span>
+          <hr>
+          <b>liter-pulication:</b><span id="publication"></span>
+          <hr>
+          <b>liter-content:</b><span id="content"></span>
+          <hr>
+          <b>liter-data:</b><span id="data"></span>
+          <hr>
+          <b>liter-info:</b><span id="info"></span>
+          <hr>
+          <b>liter-species:</b><span id="species"></span>
+          <hr>
+          <b>liter-tissue:</b><span id="tissue"></span>
+          <hr>
+          <b>liter-number_cells:</b><span id="cell"></span>
+          <hr>
+          <b>liter-type:</b><span id="type"></span>
+          <hr>
+          <b>liter-method:</b><span id="method"></span>
+          <hr>
+          <b>liter-markers:</b><span id="markers"></span>
+          <hr>
+          <b>liter-note:</b><span id="note"></span>
+          <hr>
 
         </div>
         <div class="modal-footer">
@@ -119,14 +126,7 @@
     </div>
   </div>
 
-    {% endfor %}
-
-
-
-
-
-
-
+  {% endfor %}
 
 
 
@@ -225,71 +225,87 @@
   }
 </script>
 
-<script>
-  $(document).ready(function () {
-    $(".a1").click(function (event) {
-      // event.preventDefault();
-
-      var link = $(this).text();
-
-      $.ajax({
-        url: "/api/test/liter/",
-        type: "GET",
-        data: {
-          link: link
-        },
-        headers: {
-          "X-Request-Name": "your-request-name"
-        },
-        success: function (response) {
-          console.log(response);
-          // window.location.href = link;
-        }
-      });
-    });
-  });
-</script>
 
 <!-- 模态框 -->
 <script>
-$('.openModalLink').click(function() {
+  $('.openModalLink').click(function () {
 
-  var id = $(this).data('id');
-  var title = $(this).data('title');
-  var abstract = $(this).data('abstract');
-  var publication = $(this).data('publication');
-  var content = $(this).data('content');
-  var data = $(this).data('data');
-  var info = $(this).data('info');
-  var species = $(this).data('species');
-  var tissue = $(this).data('tissue');
-  var cell = $(this).data('cell');
-  var type = $(this).data('type');
-  var method = $(this).data('method');
-  var markers = $(this).data('markers');
-  var note = $(this).data('note');
+    var id = $(this).data('id');
+    var title = $(this).data('title');
+    var abstract = $(this).data('abstract');
+    var publication = $(this).data('publication');
+    var content = $(this).data('content');
+    var data = $(this).data('data');
+    var info = $(this).data('info');
+    var species = $(this).data('species');
+    var tissue = $(this).data('tissue');
+    var cell = $(this).data('cell');
+    var type = $(this).data('type');
+    var method = $(this).data('method');
+    var markers = $(this).data('markers');
+    var note = $(this).data('note');
 
-  // 使用模板中的数据渲染模态框
-  $('.modal-title').html(title);
-  $('.modal-body #id').html('&nbsp;&nbsp;&nbsp;' + id);
-  $('.modal-body #abstract').html('&nbsp;&nbsp;&nbsp;' + abstract);
-  $('.modal-body #publication').html('&nbsp;&nbsp;&nbsp;' + publication);
-  $('.modal-body #content').html('&nbsp;&nbsp;&nbsp;' + content);
-  $('.modal-body #data').html('&nbsp;&nbsp;&nbsp;' + data);
-  $('.modal-body #info').html('&nbsp;&nbsp;&nbsp;' + info);
-  $('.modal-body #species').html('&nbsp;&nbsp;&nbsp;' + species);
-  $('.modal-body #tissue').html('&nbsp;&nbsp;&nbsp;' + tissue);
-  $('.modal-body #cell').html('&nbsp;&nbsp;&nbsp;' + cell);
-  $('.modal-body #type').html('&nbsp;&nbsp;&nbsp;' + type);
-  $('.modal-body #method').html('&nbsp;&nbsp;&nbsp;' + method);
-  $('.modal-body #markers').html('&nbsp;&nbsp;&nbsp;' + markers);
-  $('.modal-body #note').html('&nbsp;&nbsp;&nbsp;' + note);
+    // 使用模板中的数据渲染模态框
+    $('.modal-title').html(title);
+    $('.modal-body #id').html('&nbsp;&nbsp;&nbsp;' + id);
+    $('.modal-body #abstract').html('&nbsp;&nbsp;&nbsp;' + abstract);
+    $('.modal-body #publication').html('&nbsp;&nbsp;&nbsp;' + publication);
+    $('.modal-body #content').html('&nbsp;&nbsp;&nbsp;' + content);
+    $('.modal-body #data').html('&nbsp;&nbsp;&nbsp;' + data);
+    $('.modal-body #info').html('&nbsp;&nbsp;&nbsp;' + info);
+    $('.modal-body #species').html('&nbsp;&nbsp;&nbsp;' + species);
+    $('.modal-body #tissue').html('&nbsp;&nbsp;&nbsp;' + tissue);
+    $('.modal-body #cell').html('&nbsp;&nbsp;&nbsp;' + cell);
+    $('.modal-body #type').html('&nbsp;&nbsp;&nbsp;' + type);
+    $('.modal-body #method').html('&nbsp;&nbsp;&nbsp;' + method);
+    $('.modal-body #markers').html('&nbsp;&nbsp;&nbsp;' + markers);
+    $('.modal-body #note').html('&nbsp;&nbsp;&nbsp;' + note);
 
-  // $('.modal-body hr').next().text('content - ' + modalContent);
+    // $('.modal-body hr').next().text('content - ' + modalContent);
 
-  // 根据链接中的 data-bs-target 属性来显示对应的模态框
-  var targetModal = $(this).attr('data-bs-target');
-  $(targetModal).modal('show');
-});
+    // 根据链接中的 data-bs-target 属性来显示对应的模态框
+    var targetModal = $(this).attr('data-bs-target');
+    $(targetModal).modal('show');
+  });
 </script>
+
+<!-- 跳转plot -->
+<script>
+  $('.plot').click(function (event) {
+    event.preventDefault();
+
+    var content = $(this).text();
+    url = "{% url 'celldb-plot' %}" + "?literid=" + encodeURIComponent(content); // 添加内容到URL参数中
+    window.location.href = url; // 跳转到修改后的URL
+  });
+
+  $(".browse").click(function () {
+    var pmid = $(this).val();
+    var url = "/browse-feature/?pmid=" + encodeURIComponent(pmid);
+    window.location.href = url;
+  });
+
+  $(".analyse").click(function () {
+    var pmid = $(this).val();
+    var url = "/analyse/?pmid=" + encodeURIComponent(pmid);
+    window.location.href = url;
+  });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {% endblock %}

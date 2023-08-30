@@ -5,6 +5,7 @@ from django.db import models
 
 # Create your models here.
 
+# tliver=tranmeta
 class tliver(models.Model):
     Cell_barcode  = models.CharField(max_length=32)
     cell_type = models.CharField(max_length=20)
@@ -41,19 +42,7 @@ class tliver1(models.Model):
         managed = False
         db_table = 'tliver1'
 
-# class DataSetMeta(models.Model):
-#     dataset_id = models.CharField(primary_key=True, max_length=100)
-#     subdata_id = models.CharField(max_length=100, blank=True, null=True)
-#     dataset_design = models.TextField(blank=True, null=True)
-#     dataset_citation = models.TextField(blank=True, null=True)
-#     data_platform = models.CharField(max_length=100, blank=True, null=True)
-#     data_model = models.CharField(max_length=100, blank=True, null=True)
-#     data_library = models.CharField(max_length=100, blank=True, null=True)
-#     dataset_sample = models.TextField(blank=True, null=True)
-
-#     def __str__(self):
-#         return self.dataset_id
-
+#LiteratureMeta=LiterData
 class LiterData(models.Model):
     Liter_pmid = models.CharField(primary_key=True, max_length=100)
     Liter_title = models.CharField(max_length=1000, blank=True, null=True)
@@ -90,3 +79,84 @@ class UploadedFile(models.Model):
     class Meta:
         managed = False
         db_table = 'celldb_uploadedfile'
+
+
+# class gene137537(models.Model):
+#     gene  = models.CharField(max_length=255)
+#     id = models.IntegerField(primary_key=True)
+
+#     class Meta:
+#         managed = False
+#         db_table = 'gene137537'
+
+
+class countsGSE137537(models.Model):
+    cell = models.CharField(max_length=255)
+    exp = models.CharField(max_length=255)
+    genename = models.CharField(max_length=255)
+    liter = models.CharField(max_length=255)
+    
+    class Meta:
+        managed = False
+        db_table = 'countsGSE137537'
+
+class countsGSE137846(models.Model):
+    # gene  = models.CharField(max_length=255)
+    cell = models.CharField(max_length=255)
+    exp = models.CharField(max_length=255)
+    genename = models.CharField(max_length=255)
+    liter = models.CharField(max_length=255)
+
+    class Meta:
+        managed = False
+        db_table = 'countsGSE137846'
+
+class AllLiter(models.Model):
+    liter = models.CharField(max_length=255)
+    species = models.CharField(max_length=255)
+    gene = models.CharField(max_length=255)
+    id = models.IntegerField(primary_key=True)
+    class Meta:
+        managed = False
+        db_table = 'allliter'
+
+class HumanLiter(models.Model):
+    liter = models.CharField(max_length=255)
+    gene = models.CharField(max_length=255)
+
+    class Meta:
+        managed = False
+        db_table = 'humanliter'
+
+class MouseLiter(models.Model):
+    liter = models.CharField(max_length=255)
+    gene = models.CharField(max_length=255)
+
+    class Meta:
+        managed = False
+        db_table = 'mouseliter'
+
+
+
+
+
+
+
+
+
+
+
+# class DataSetMeta(models.Model):
+#     dataset_id = models.CharField(primary_key=True, max_length=100)
+#     subdata_id = models.CharField(max_length=100, blank=True, null=True)
+#     dataset_design = models.TextField(blank=True, null=True)
+#     dataset_citation = models.TextField(blank=True, null=True)
+#     data_platform = models.CharField(max_length=100, blank=True, null=True)
+#     data_model = models.CharField(max_length=100, blank=True, null=True)
+#     data_library = models.CharField(max_length=100, blank=True, null=True)
+#     dataset_sample = models.TextField(blank=True, null=True)
+
+#     def __str__(self):
+#         return self.dataset_id
+
+        

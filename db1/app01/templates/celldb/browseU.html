@@ -1,346 +1,346 @@
 {% extends 'celldb/base.html' %} {% load static %} {% block content %}
-<!-- <link href="{% static 'celldb/css/cdn.datatables.net_1.13.4_css_dataTables.bootstrap5.min.css' %}" rel="stylesheet" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" /> -->
-<style>
-  .divset1 {
-    display: flex;
-  }
-</style>
 
+<div style="height: 100px;"></div>
+<div class="container">
 
-<!-- 表格数据 -->
-<div class="divset1">
-  <div class="card col-md-3">
-    <div class="col-md-12">
-      <div style="display: flex; margin-top: 20px;">
-        <label for="SelectLiter" style="margin-right: 5px;">Literid Choose</label>
+  <div class="jumbotron" style="padding-top:20px; padding-bottom:15px;padding-left: 20px; background-color:#F0F8FF">
 
-
-        <select class="form-select" aria-label="Default select example" id="SelectLiter"
-          style="width: 150px; height: 40px;">
-          <option value=''>All</option>
-          
-        </select>
-
-
-
-
-
-      </div>
-      <hr>
-      <div>
-        <label for="cellTypeFilter">Type</label>
-        <select id="cellTypeFilter" class="mb-2" style="width: 25%">
-          <option value="">All</option>
-
-        </select>
-      </div>
-      <div>
-        <label for="min" style="font-size: 4px">Min X</label>
-        <input type="text" style="width: 50px" id="min" name="min" />
-        <label for="max" style="font-size: 4px">Max X</label>
-        <input type="text" style="width: 50px" id="max" name="max" />
-
-      </div>
-      <div>
-        <button id="downloadBtn" class="btn btn-primary ">Download Data</button>
-
-      </div>
-
-
-
-
-
-
-
-
-    </div>
+    <h1>Search</h1>
+    <p>搜索来自x个scRNA-seq数据集的数据查找表达特定一组基因的细胞类型。
+    </p>
   </div>
-  <div style="width: 50px;"></div>
-  <div class="card col-md-8">
-
-    <div class="card-body">
-      <div class="container">
-
-        <div class="row justify-content-between">
-          <h3 class="card-title ">Data</h3>
-          <div class="col-md-4 mb-2">
-
-            <button type="button" id="Plot" class="btn btn-primary">Plot</button>
-          </div>
-
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <table id="example" class="table table-hover table-str" style="width: 100%; border-collapse: collapse">
-              <thead>
-                <tr>
-                  <th>Barcode</th>
-                  <th>Type</th>
-                  <th>Zone</th>
-                  <th>Run</th>
-                  <th>Time</th>
-                  <th>X</th>
-                  <th>Y</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+  <div class="row">
+    <div class="col-md-12 text-center" style="margin-top:100px">
     </div>
   </div>
 </div>
+
+<a href="{% url 'celldb-searchtype' %}" class="link plot" style="margin-left: 100px;">SEARCH CELL TYPE</a>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 text-center">
+      <p class="text-muted" style="margin-bottom:20px">搜索一个基因（或用逗号分隔的多个基因）<span data-toggle="tooltip"
+          data-placement="top" data-html="true" title=""></span></p>
+    </div>
+  </div>
+
+
+  <form id="searchform" name="searchform">
+
+    <!-- 搜索框 -->
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <input id="searchbox" name="q" type="text" placeholder="gene symbol name..." style="width:600px" autofocus="">
+        <br><span id="errormsg" class="form-text" style="color:red; visibility:hidden"></span>
+      </div>
+    </div>
+
+    <!-- 物种选择框 -->
+    <div class="row">
+      <div class="col-md-12 text-center" style="margin-top:20px">
+        <label for="speciesbox" style="margin-right:3px">Species</label>
+
+        <select id="speciesbox" name="speciesbox">
+          <option value="1">Mouse and human</option>
+          <option value="2">Mouse</option>
+          <option value="3">Human</option>
+        </select>
+
+        <br>
+      </div>
+    </div>
+
+    <!-- 加长用的 -->
+    <div class="row">
+      <div class="col-md-12 text-center" style="margin-top:20px">
+      </div>
+      <div class="col-md-12 text-center" style="margin-top:20px ">
+        <!-- 按钮的样式 -->
+        <style>
+          .btn {
+            background-color: DodgerBlue;
+            border: none;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+          }
+
+          /* Darker background on mouse-over */
+          .btn:hover {
+            background-color: RoyalBlue;
+          }
+        </style>
+
+        <button class="btn btn-primary" style="font-size:18px; margin-top:10px" id="searchbutton" name="searchbutton"
+          onclick="searchbtn();"><i class="fa fa-search" style="margin-right:5px"></i> Search</button>
+
+      </div>
+    </div>
+  </form>
+
+
+  <!-- <div class="row" >
+    <div class="col-md-12 text-center" style="margin-top:20px">
+      <button class="btn btn-primary" style="font-size:18px; margin-top:10px; width: 100px; margin: auto;"
+        id="plotbutton" name="plotbutton" onclick="plot();"><i class="fa-solid fa-pen" style="margin-right:5px"></i>
+        plot</button>
+    </div>
+  </div> -->
+
+<!-- all选项 -->
+  <div class="row">
+    <div class="col-md-1 offset-md-11">
+    <label id="all">
+      <input type="checkbox" id="allCheckbox" onchange="toggleCheckboxes()">all
+    </label></div>
+  </div>
+
+</div>
+
+
+
+  <div class="container" style="margin: auto;">
+    <table class="table" id="table">
+      <thead>
+        <tr>
+          <th scope="col">gene</th>
+          <th scope="col">liter</th>
+          <th scope="col">species</th>
+          <th scope="col">plot</th>
+          <th scope="col" style="width: 100px;"> <button class="btn btn-primary" style="font-size:10px; margin-top:10px"
+              id="downloadbtn" name="downloadbtn"><i class="fa fa-download" style="margin-right:5px"></i>
+              Download</button> </th>
+
+
+
+
+
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- <tr>
+          <td id="genename">geneA</td>
+          <td id="idname">1234567</td>
+          <td>liver</td>
+          <td><a href="{% url 'celldb-plot' %}?" target="_blank">1</a></td>
+        </tr> -->
+
+      </tbody>
+
+    </table>
+  </div>
+</div>
+
+</div>
+
+
 {% endblock %} {% block scripts %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"
-  integrity="sha512-WNLxfP/8cVYL9sj8Jnp6et0BkubLP31jhTG9vhL/F5uEZmg5wEzKoXp1kJslzPQWwPT1eyMiSxlKCgzHLOTOTQ=="
-  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-<script src="{% static 'celldb/js/cdn.datatables.net_1.13.4_js_jquery.dataTables.min.js' %}"></script>
-<script src="{% static 'celldb/js/cdn.datatables.net_1.13.4_js_dataTables.bootstrap5.min.js' %}"></script>
+<!-- 搜索功能的提交部分 -->
 <script>
-  $(document).ready(function () {
-    var minEl = $("#min");
-    var maxEl = $("#max");
-    // Custom range filtering function
-    DataTable.ext.search.push(function (settings, data, dataIndex) {
-      var min = parseFloat(minEl.val(), 10);
-      var max = parseFloat(maxEl.val(), 10);
-      var x_col = parseFloat(data[6]) || 0; // use data for the x column
-      if (
-        (isNaN(min) && isNaN(max)) ||
-        (isNaN(min) && x_col <= max) ||
-        (min <= x_col && isNaN(max)) ||
-        (min <= x_col && x_col <= max)
-      ) {
-        return true;
-      }
-
-      return false;
-    });
-
-    var table = $("#example").DataTable({
-      ajax: {
-        url: "/api/tran/all",
-        dataSrc: "",
-      },
-      columns: [
-        // { data: "id", orderable: false, searchable: false },
-        {
-          data: "Cell_barcode",
-          orderable: false,
-          searchable: false
-        },
-        {
-          data: "cell_type",
-          orderable: false,
-          searchable: true
-        },
-        {
-          data: "zone",
-          orderable: false,
-          searchable: false
-        },
-        {
-          data: "run_id",
-          orderable: false,
-          searchable: false
-        },
-        {
-          data: "time_point",
-          orderable: false,
-          searchable: false
-        },
-        {
-          data: "UMAP_X",
-          render: function (data) {
-            return parseFloat(data).toExponential(2);
-          },
-          searchable: true,
-        },
-        {
-          data: "UMAP_Y",
-          render: function (data) {
-            return parseFloat(data).toExponential(2);
-          },
-          searchable: true,
-        },
-      ],
-      paging: true,
-      deferRender: true,
-      order: [],
-
-      language: {
-        sortAscending: '<i class="fas fa-sort-up"></i>',
-        sortDescending: '<i class="fas fa-sort-down"></i>',
-      },
-      // 获取所有的 cell_type 数据
-      initComplete: function () {
-        var cellTypes = table.column(1).data().unique().toArray();
-        var selectOptions = cellTypes.map(function (cellType) {
-          return '<option value="' + cellType + '">' + cellType + "</option>";
-        });
-        $("#cellTypeFilter").append(selectOptions.join(""));
-        $("#cellTypeFilter").on("change", function () {
-          var selectedCellType = $(this).val();
-
-          table.column(1).search(selectedCellType).draw();
-        });
-      },
-    });
-
-    minEl.on("input", function () {
-      table.draw();
-    });
-    maxEl.on("input", function () {
-      table.draw();
-    });
+  $('#searchform').submit(function (event) {
+    // prevent default browser behaviour
+    event.preventDefault();
   });
+
+  function searchbtn() {
+    var genes = encodeURI($('#searchbox').val());
+    var species = encodeURI($('#speciesbox').val());
+
+    // var method = document.getElementById('methodbox').value;
+
+    if (genes != '') {
+      search_url = "{% url 'celldb-search' %}" + "?gene=" + genes + "&species=" + species;
+      window.location = search_url;
+    } else {
+      //please type a gene symbol or a list of gene symbols separated by comma, for example: sox2,sox9,sox10
+      $('#errormsg').css('visibility', 'visible');
+      $('#errormsg').html(
+        'please type a gene symbol or a list of gene symbols separated by comma, for example: sox2,alb');
+    }
+    return false;
+  }
+
+
+  // function plot() {
+  //   var genes = encodeURI(document.getElementById('searchbox').value);
+
+  //   // var method = document.getElementById('methodbox').value;
+
+  //   if (genes != '') {
+  //     search_url = "{% url 'celldb-plot' %}" + "?gene=" + genes;
+  //     window.location = search_url;
+  //   } else {
+  //     //please type a gene symbol or a list of gene symbols separated by comma, for example: sox2,sox9,sox10
+  //     document.getElementById('errormsg').style.visibility = "visible";
+  //     document.getElementById('errormsg').innerHTML =
+  //       'please type a gene symbol or a list of gene symbols separated by comma, for example: sox2,alb';
+  //   }
+  //   return false;
+  // }
 </script>
 
 <script>
+  // 搜索功能
   $(document).ready(function () {
-    // 添加按钮点击事件处理函数
-    $("#downloadBtn").click(function () {
-      // 获取当前表格中的数据
-      var table = $("#example").DataTable();
-      var filteredData = table.rows({
-        search: "applied"
-      }).data().toArray();
 
-      // 执行下载操作，可以根据需要自定义实现
-      downloadData(filteredData);
-    });
+    var table = $('#table');
+    var all = $('#all');
+    table.hide();
+    all.hide();
 
-    // 处理绘图事件
-    // 获取选择框和按钮的元素
-    var cellTypeFilter = $("#cellTypeFilter");
-    var plotButton = $("#Plot");
+    var tbody = table.find('tbody');
 
-    // 添加点击事件处理程序
-    plotButton.on("click", function () {
-      // 获取选择框的值
-      var selectedCellType = cellTypeFilter.val();
-      window.location.href = "/plot";
-    });
-  });
-
-  // 下载数据的函数
-  function downloadData(data) {
-    // 将数据转换为文本格式
-    var textData = JSON.stringify(data);
-    // 转化为csv格式
-    var csv =
-      "data_id,cell_barcode,cell_type,zone,run_id,time_point,umap_x,umap_y\n";
-    var csvRows = data.map(function (row) {
-      return [
-        row.data_id,
-        row.cell_barcode,
-        row.cell_type,
-        row.zone,
-        row.run_id,
-        row.time_point,
-        row.umap_x,
-        row.umap_y,
-      ].join(",");
-    });
-    csv += csvRows.join("\n");
-    var blob = new Blob([csv], {
-      type: "text/csv;charset=utf-8;",
-    });
-    // 创建一个 <a> 元素
-    var link = document.createElement("a");
-    link.setAttribute("href", URL.createObjectURL(blob));
-    link.setAttribute("download", "data.csv");
-
-    // 模拟点击下载链接
-    link.click();
-  }
-  // ///////////////////////////////////////////////////////////////          literidchange
-
-
-  $(document).ready(function () {
-    $('#SelectLiter').change(function () {
-      var selectedOption = $(this).val(); // 获取被选中的选项的值
-
+    var url = window.location.href;
+    var queryString = location.search;
+    // if (queryString) {
+    //   var queryString = queryString.split('&');
+    //   var value;
+    //   for (var i = 0; i < queryString.length; i++) {
+    //     var v = queryString[i].split('=');
+    //     if (v[0] === '?gene') {
+    //       value = v[1];
+    //       break;
+    //     }
+    //   }
+    if (queryString) {
+      var params = new URLSearchParams(queryString);
+      var gene = params.get('gene');
+      var species = params.get('species');
       $.ajax({
-        url: '/api/LiterUmap',
+        url: '/api/seaexcel/',
         method: 'GET',
         data: {
-          selectedOption: selectedOption
+          gene: gene,
+          species: species
         },
-        success: function (response) {
+        success: function (data) {
+          // 如果有数据，则渲染到表格中
+          if (data.length > 0) {
+            // 清空tbody内容
+            tbody.empty();
 
+            // 渲染
+            renderTable(data);
+
+            table.show();
+            all.show();
+          }
         },
+        error: function () {
+          // 处理错误
+        }
       });
-    });
+
+      function renderTable(data) {
+        var tableBody = $('#table tbody');
+        tableBody.empty(); // 清空表格内容，以防重复渲染
+
+        // 遍历后端传回的数据并渲染到表格
+        for (var i = 0; i < data.length; i++) {
+          var row = data[i];
+          var rowHtml = '<tr>' +
+            '<td class="x">' + row.gene + '</td>' +
+            '<td class="y">' + row.liter + '</td>' +
+            '<td>' + row.species + '</td>' +
+            '<td><a href="/plot/?gene=' + encodeURIComponent(row.gene) + '&liter=' + encodeURIComponent(row.liter) +
+            '">' + row.gene + '</a></td>' +
+            '<td ><input type="checkbox" name="row"></td>' +
+            '</tr>';
+          tableBody.append(rowHtml);
+        }
+      }
+
+
+    }
+
+
   });
 </script>
 
 
-<!-- 默认选中option -->
-<!-- <script>
-  window.onload = function() {
-    const selectedValue = sessionStorage.getItem('selectedValue');
-    const selectBox = document.getElementById('SelectLiter'); // 假设为select框的id
-    for (let i = 0; i < selectBox.options.length; i++) {
-      if (selectBox.options[i].value === selectedValue) {
-        selectBox.selectedIndex = i;
-        break;
-      }
-    }
-    sessionStorage.removeItem('selectedValue'); // 清除sessionStorage中的选中值
-  }
-</script> -->
-
-
-
-
-
+<!-- 默认选中功能 -->
 <script>
   $(document).ready(function () {
-    $.ajax({
-      url: 'api/tran/literid', // 后端接口的URL
-      method: 'GET',
-      dataType: 'json',
-      success: function (response) {
+    // 获取 URL 参数值
+    const urlParams = new URLSearchParams(window.location.search);
+    const speciesParam = urlParams.get('species');
+    const geneParam = urlParams.get('gene');
 
 
-        // var options = response.options; // 假设后端返回的数据格式为 { "options": ["Option 1", "Option 2", "Option 3"] }
+    // 设置选中项
+    if (speciesParam) {
+      $('#speciesbox').val(speciesParam);
+    }
 
-        // var select = $('#mySelect');
-        // $.each(options, function(index, value) {
-        //   select.append($('<option>').text(value).val(value));
-        // });
-      },
+    if (geneParam) {
+      $('#searchbox').val(geneParam);
+    }
 
-
-
-    });
   });
 </script>
 
-
+<!-- all选择框 -->
 <script>
-  fetch('api/tran/literid')
-    .then(response => response.json())
-    .then(data => {
-      // 渲染数据到<select>元素中的<option>选项
-      const selectElement = document.getElementById('SelectLiter');
+  function toggleCheckboxes() {
+    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    var allCheckbox = document.getElementById('allCheckbox');
 
-      data.forEach(item => {
-        const option = document.createElement('option');
-        option.value = item.Liter_pmid;
-        option.textContent = item.Liter_pmid;
-        selectElement.appendChild(option);
-      });
-    })
-    .catch(error => console.log(error));
+    for (var i = 0; i < checkboxes.length; i++) {
+      checkboxes[i].checked = allCheckbox.checked;
+    }
+  }
 </script>
 
 
 
+
+<!-- 下载按钮 -->
+
+
+
+<!-- <script>
+  // jQuery代码
+  $(document).ready(function () {
+    $('#downloadbtn').click(function () {
+      var selectedRows = $('input[type="checkbox"]:checked').closest('tr');
+      var params = [];
+
+      selectedRows.each(function () {
+        var x = $(this).find('.x').text();
+        var y = $(this).find('.y').text();
+        var param = 'x=' + encodeURIComponent(x) + '&y=' + encodeURIComponent(y);
+
+        params.push(param);
+      });
+
+
+      if (params.length > 0) {
+        var params = params.join(',');
+        console.log(params)
+
+
+        $.ajax({
+          url: '/api/dldexcel/',
+          method: 'GET',
+          data: {
+            params: params
+          },
+          success: function (data) {
+
+            down(data)
+          },
+          error: function () {
+            // 处理错误
+          }
+        });
+
+      }
+    });
+  });
+</script> -->
 
 
 {% endblock %}

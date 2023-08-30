@@ -1,21 +1,11 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render,redirect
 from .models import tliver1, LiterData
-from . import models
-
+# from . import models
+import json
 
 def home(request):
-    # logs = [
-    #     {"date": "5.24~5.31", "content": "使用Django框架建立网站的雏形"},
-    #     {"date": "6.1", "content": "实现了在后端对Single_cell_Meta_data.txt中的数据进行绘制，并传回前端页面"},
-    #     {"date": "6.3", "content": "学习使用JavaScript，以便处理数据格式"},
-    #     {"date": "6.4~6.6", "content": "使用echarts.js绘图"},
-    #     {"date": "6.7~6.10", "content": "分页功能实现"},
-    #     {"date": "6.11~15", "content": "尝试前后端分离"},
-    #     {"date": "6.16~6.20", "content": "完善搜索功能和分页按钮"},
-    #     {"date": "6.21~6.27", "content": "使用Databales插件;增加了下载数据功能;Plot增加了筛选功能;上传了summary文件中的数据"},
-    #     {"date": "6.28~7.5", "content": "对数据过滤，允许对数据进行添加或删除"},
-    # ]
+
     return render(request, "celldb/home.html", )
 
 def plotScatter(request):
@@ -23,11 +13,9 @@ def plotScatter(request):
 
 def overview(request):
     liter = LiterData.objects.all()
-    data = ""
+    return render(request, "celldb/overview.html", {"liter":liter})
 
-    return render(request, "celldb/overview.html", {"data": data, "liter":liter})
-
-def browseU(request):
+# def browseU(request):
     # data = tliver1.objects.all()
     # items_per_page = 10
     # paginator = Paginator(data, items_per_page)
@@ -36,72 +24,57 @@ def browseU(request):
 
     # liter = LiterData.objects.all()
     # data = ""
-    liter = LiterData.objects.all()
-    
+    # liter = LiterData.objects.all()
+    # return render(request, "celldb/browseU.html", {"liter":liter})
+def search(req):
+    gene = req.GET.get("gene")
+    gene_type = tliver1.objects.filter(run_id=gene).values_list('zone', flat=True).distinct()
+    gene_type_list = list(gene_type)
 
-    return render(request, "celldb/browseU.html", {"liter":liter})
+    json_data = json.dumps(gene_type_list)
+    print(json_data)
+    return render(req, 'celldb/search.html',{"type": gene_type_list})
 
-
-
-def browseG(req):
-
-
-    dict ={}
-    search = req.GET.get("q","")
-    # if search:
-    #     dict ["zone"]= search
-    # queryset = models.tliver.objects.filter(**dict).order_by("-cell_type").values()
-
-    search = req.GET.get("q","")
-    field = req.GET.get("field")
-
-
-    queryset = models.tliver1.objects.all().order_by("-cell_type").values()
-
-    return render(request, "celldb/browseG.html")
 
 
 def upload(request):
     return render(request, "celldb/upload.html")
 
-
-
 def download(request):
     return render(request, "celldb/download.html")
-
-
 
 def base(req):
     return render(req,'celldb/base.html')
 
-
-
-
 def analyse(req):
     return render(req,'celldb/analyse.html')
 
+def upload(request):
+    return render(request, "celldb/upload.html")
 
+def plotLocal(request):
+    return render(request, "celldb/plotLocal.html")
 
+def plotR(request):
+    return render(request, "celldb/plotR.html")
 
+def runCode(request):
+    return render(request, "celldb/runCode.html")
 
-def testli(req):
+def browseU(request):
+    return render(request, "celldb/browseU.html")
 
-    link=req.GET.get('link')
-    url = f"/test?link={link}"
-    print(url)
-    # data = LiterData.objects.values()
-    # serializer = LiterIdSer(data, many=True)
+def browseE(request):
+    return render(request, "celldb/browseE.html")
 
-    # return Response(serializer.data)
-    return redirect(url)
-
-
+def searchcelltype(request):
+    return render(request, "celldb/searchcelltype.html")
 
 def test(req):
     link= req.GET.get('link')
     print(link)
     if link:
-        return render(req,'celldb/browseG.html',{'link':link})
+        return render(req,'celldb/plotScatter.html',{'link':link})
     else:
         return render(req,'celldb/test.html')
 
@@ -114,6 +87,17 @@ def test(req):
 
 
 
+# def browseG(req):
+
+#     dict ={}
+#     search = req.GET.get("q","")
+#     # if search:
+#     #     dict ["zone"]= search
+#     # queryset = models.tliver.objects.filter(**dict).order_by("-cell_type").values()
+
+#     queryset = models.tliver1.objects.all().order_by("-cell_type").values()
+
+#     return render(req, "celldb/browseG.html", {})
 
 
 

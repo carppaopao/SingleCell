@@ -8,6 +8,8 @@
 
 
 <a class="nav-link a1" href="{% url 'celldb-browseG' %}" >24528865</a>
+
+
 <button class="a1">24528865</button>
   
 
@@ -62,6 +64,145 @@
   
 
 
-
-
 {% endblock %}
+
+
+
+<!-- <script>
+
+var fn = "csvs/4948700f.csv";
+
+if (fn != "") {
+    jQuery.get('https://panglaodb.se/' + fn, function(data) {
+  var rows = data.split('\n');
+  var table = document.getElementById("restable");
+  var tablesummary = document.getElementById("summarytable");
+
+  var i;
+  var c = 0;
+  var nf = /^(gene_symbol_not_found|no_clusters_found|no_exp_found|synonym_found|total_samples_found)/;
+
+  if (rows.length > 2) {
+      document.getElementById("restable").style.visibility = "visible";
+
+      document.getElementById("summarytablerow").style.visibility = "visible";
+      tablesummary.style.visibility = "visible";
+  } else {
+      document.getElementById("restable").style.visibility = "hidden";
+      document.getElementById("summarytablerow").style.visibility = "hidden";
+      tablesummary.style.visibility = "hidden";
+  }
+
+  for (i=0; i<rows.length; i++) {
+      if (nf.test(rows[i])) {
+    var rx1 = /^gene_symbol_not_found/;
+    var rx2 = /^no_exp_found/;
+    var rx3 = /^synonym_found/;
+    var rx4 = /^total_samples_found/;
+    var rx5 = /^no_clusters_found/;
+
+    dd = rows[i].split(/\t/);
+
+    if (rx1.test(rows[i])) {
+        $("#my-alert").show();
+        document.getElementById('my_alert_box').innerHTML += 'There is no gene with the symbol "' + dd[1] + '".<br>';
+    } else if (rx2.test(rows[i])) {
+        $("#my-alert").show();
+
+        document.getElementById('my_alert_box').innerHTML += 'There is a gene called "' + dd[1] + '", but it has zero expression.<br>';
+    } else if (rx3.test(rows[i])) {
+        $("#my-alert2").show();
+
+        document.getElementById('my_alert_box2').innerHTML += 'Did you mean <a href="search.html?query='+dd[2]+'&species=1">'+dd[2]+'</a> instead of '+dd[1]+'?<br>';
+    }
+    else if (rx4.test(rows[i])) {
+        var row = tablesummary.insertRow(-1);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+
+        dd = rows[i].split(/\t/);
+
+        cell1.innerHTML = dd[1];
+        cell2.innerHTML = dd[4];
+        cell3.innerHTML = dd[5];
+
+        cell4.innerHTML = dd[2];
+        cell5.innerHTML = dd[3];
+    }
+    else if (rx5.test(rows[i])) {
+        $("#my-alert").show();
+        document.getElementById('my_alert_box').innerHTML += 'No clusters found where these genes are expressed: "' + dd[1] + '".<br>';
+    }
+      } else {
+    dd = rows[i].split(/\t/);
+
+    if (rows[i] != "") {
+        var row = table.insertRow(-1);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+        var cell6 = row.insertCell(5);
+        var cell7 = row.insertCell(6);
+        var cell8 = row.insertCell(7);
+
+        species = '';
+
+        if (dd[0] == 'Mus_musculus') {
+      species = '<a href="https://en.wikipedia.org/wiki/Mus_musculus">Mm</a>';
+        } else {
+      species = '<a href="https://en.wikipedia.org/wiki/Homo_sapiens">Hs</a>';
+
+      row.style="background-color:rgb(206, 254, 206)";
+        }
+
+        cell1.innerHTML = species;
+        cell2.innerHTML = "<font style=\"font-family:monospace;\">" + dd[1] + "</font>";
+        cell3.innerHTML = dd[4];
+        
+        //console.log(dd[2] + ' ' + dd[2].search('SRS'))
+
+        if (dd[2].search('SRS') != -1) {
+      cell4.innerHTML = '<a href="view_data.php?sra=' + dd[2].split('_')[0] + '&srs=' + dd[2].split('_')[1] + '">' + dd[2].split('_')[1] + "</a>"; // this is the SRA_SRS id
+        } else {
+      cell4.innerHTML = '<a href="view_data.php?sra=' + dd[2] + '&srs=notused">' + dd[2] + "</a>"; // this is the SRA_SRS id
+        }
+
+        cell5.innerHTML = dd[3];
+        
+        // inferred cell type
+        cell6.innerHTML = dd[5];
+        
+        // rank
+        cell7.innerHTML = dd[6];
+
+        //cell9.innerHTML = '<a href="view_cluster_exp.php?sra=' + dd[2].split('_')[0] + '&srs=' + dd[2].split('_')[1] + '&cluster='+dd[3]+'&gene='+dd[1]+'&type=1" target="_passwin"><i class="far fa-compass"></i></a> | '; // SRA_SRS id
+        //cell9.innerHTML = ' <a href="view_cluster_exp.php?sra=' + dd[2].split('_')[0] + '&srs=' + dd[2].split('_')[1] + '&cluster='+dd[3]+'&gene='+dd[1]+'&type=2" target="_passwin"><i class="fas fa-binoculars"></i></a> | '; // SRA_SRS id
+
+        if (dd[2].search('SRS') != -1) {
+      cell8.innerHTML = '<a href="view_interactive_tsne_data.html?sra=' + dd[2].split('_')[0] + '&srs=' + dd[2].split('_')[1] + '&plot=tsne&overlay='+dd[1]+'" target="_passwin"><i class="fas fa-binoculars"></i></a> |'; // SRA_SRS id
+        } else {
+      cell8.innerHTML = '<a href="view_interactive_tsne_data.html?sra=' + dd[2] + '&srs=notused&plot=tsne&overlay='+dd[1]+'" target="_passwin"><i class="fas fa-binoculars"></i></a> |'; // SRA_SRS id
+        }
+
+        if (dd[2].search('SRS') != -1) {
+      cell8.innerHTML += ' <a href="view_interactive_tsne_data.html?sra=' + dd[2].split('_')[0] + '&srs=' + dd[2].split('_')[1] + '&plot=tsne" target="_passwin"><i class="fas fa-folder-open"></i></a>'; // SRA_SRS id
+        } else {
+      cell8.innerHTML += ' <a href="view_interactive_tsne_data.html?sra=' + dd[2] + '&srs=notused&plot=tsne" target="_passwin"><i class="fas fa-folder-open"></i></a>'; // SRA_SRS id
+        }
+
+        c = 1;
+    }
+      }
+  }
+
+  if (c == 0) {
+      document.getElementById("restable").style.visibility = "hidden";
+  }
+    });
+}
+</script> -->
